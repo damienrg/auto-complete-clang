@@ -38,6 +38,10 @@
   :group 'auto-complete
   :type 'file)
 
+(defvar ac-clang-flags-function nil
+  "Function to retrieve Clang flags.
+This function is called each time the Clang executable is executed")
+
 ;;; Extra compilation flags to pass to clang.
 (defcustom ac-clang-flags nil
   "Extra flags to pass to the Clang executable.
@@ -176,6 +180,8 @@ This variable will typically contain include paths, e.g., ( \"-I~/MyProject\", \
 
 (defsubst ac-clang-build-complete-args (pos)
   (append '("-cc1" "-x" "c++" "-fsyntax-only" "-fexceptions")
+          (when ac-clang-flags-function
+            (apply ac-clang-flags-function))
           ac-clang-flags
           (when (stringp ac-clang-prefix-header)
             (list "-include-pch" (expand-file-name ac-clang-prefix-header)))
