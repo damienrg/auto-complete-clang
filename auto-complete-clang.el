@@ -156,14 +156,16 @@ This variable will typically contain include paths, e.g., ( \"-I~/MyProject\", \
 
 (defun ac-clang-call-process (prefix &rest args)
   (let ((name-of-buffer-to-parse (buffer-name)))
-  (with-temp-buffer
-      (insert-buffer name-of-buffer-to-parse)
-      (let ((res (apply 'call-process-region (point-min) (point-max)
-                        ac-clang-executable t t nil args)))
-      (unless (eq 0 res)
-        (ac-clang-handle-error res args))
-      ;; Still try to get any useful input.
-        (ac-clang-parse-output prefix)))))
+    (save-restriction
+      (widen)
+      (with-temp-buffer
+        (insert-buffer name-of-buffer-to-parse)
+        (let ((res (apply 'call-process-region (point-min) (point-max)
+                          ac-clang-executable t t nil args)))
+          (unless (eq 0 res)
+            (ac-clang-handle-error res args))
+          ;; Still try to get any useful input.
+          (ac-clang-parse-output prefix))))))
 
 
 (defsubst ac-clang-build-location (pos)
