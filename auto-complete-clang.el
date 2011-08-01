@@ -38,14 +38,6 @@
   :group 'auto-complete
   :type 'file)
 
-(defcustom ac-clang-auto-save t
-  "*Determines whether to save the buffer when retrieving completions.
-clang can only complete correctly when the buffer has been saved."
-  :group 'auto-complete
-  :type '(choice (const :tag "Off" nil)
-                 (const :tag "On" t)))
-
-
 ;;; Extra compilation flags to pass to clang.
 (defcustom ac-clang-flags nil
   "Extra flags to pass to the Clang executable.
